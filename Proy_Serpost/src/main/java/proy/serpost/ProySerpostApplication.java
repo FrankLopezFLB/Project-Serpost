@@ -8,6 +8,7 @@ public class ProySerpostApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProySerpostApplication.class, args);
+		System.out.println("Termino de cargar la app");
 	}
 
 }
