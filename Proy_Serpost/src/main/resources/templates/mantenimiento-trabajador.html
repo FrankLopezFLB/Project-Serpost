@@ -1,0 +1,367 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+  
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<title>Mantenimiendo Trabajador</title>
+	
+	<style>
+		body {
+	  		background: #eee;
+		}
+		.modal-header{
+			color: #191796;
+			background: #CCE5FF;
+			display: flex;
+	  		justify-content: center;  		
+		}
+		.tits{
+			font-size:35pt;
+			font-family:georgia;
+			/*font-weight:bold;*/
+		}
+		
+		.help-block {
+		  	color: red;
+		}
+		.form-group.has-error .form-control-label {
+		  color: red;
+		}
+		.form-group.has-error .form-control {
+		  border: 1px solid red;
+		  box-shadow: 0 0 0 0.2rem rgba(250, 16, 0, 0.18);
+		}
+		.hidetext { -webkit-text-security: disc;}
+	
+	</style>
+</head>
+<body>
+<div class="container">
+	<!--	<c:if test="${requestScope.MENSAJE!=null}">
+	  		<div class="alert alert-primary alert-dismissible fade show" role="alert">
+			  <strong>${requestScope.MENSAJE}</strong>
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			    <span aria-hidden="true">&times;</span>
+			  </button>
+			</div>
+  		</c:if>-->
+  		<br>
+  		<br>
+  		<h2 class="text-center tits">Lista de Trabajadores</h2>
+  		<br>
+  		<!-- Button trigger modal -->
+		<button type="button" class="btn btn-primary" style = "background-color:#191796" data-toggle="modal" data-target="#modalTrabajador">
+		  Nuevo Trabajador
+		</button>
+		<br>
+		<br>
+		<table id="tableTrabajador" class="table table-striped table-bordered" style="width:100%">
+        <thead class="thead-dark">
+            <tr>
+                <th>CÓDIGO</th>
+                <th>NOMBRE</th>
+                <th>APELLIDO</th>
+                <th>DNI</th>
+                <th>NACIMIENTO</th>
+                <th>CORREO</th>
+                <th>TELEFONO</th>
+                <th>CARGO</th>
+                <th>CONTRASEÑA</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        
+        <tbody>
+        	<!-- en el atributo items permite recuperar el atributo "docentes" que viene del ServletDocente -->
+        	<c:forEach items="${requestScope.trabajador}" var="row">
+	            <tr>
+	                <td>${row.codigo}</td>
+	                <td>${row.nombre}</td>
+	                <td>${row.apellido}</td>
+	                <td>${row.dni}</td>
+	                <td>${row.fechanac}</td>
+	                <td>${row.correo}</td>
+	                <td>${row.telefono}</td>
+	                <td>${row.nomcargo}</td>
+	                <td  class="hidetext">${row.contrasena}</td>
+	                <td><button type="button" class="btn btn-info btn-editar" data-toggle="modal" data-target="#modalTrabajador">Editar</button></td>
+	                <td><button type="button" class="btn btn-danger btn-eliminar" data-toggle="modal" data-target="#modalEliminar">Eliminar</button></td>
+	            </tr>
+            </c:forEach>
+ 		</tbody>
+       </table>
+<!-- INICIO - Modal PARA REGISTRAR Y ACTUALIZAR TRABAJADOR-->
+		<div class="modal fade" id="modalTrabajador" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="staticBackdropLabel">Trabajador</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <form id="formTrabajador"  action="ServletTrabajador?ACCION=GUARDAR" method="post">
+		         <div class="form-group" hidden>
+				    <label for="exampleInputEmail1">Código</label>  <!-- OJO CON EL VALUE Y EL CONTROLADOR -->
+				    <input type="text" class="form-control" id="idCodigo" name="codigo" value="0" readonly>
+				  </div>
+				  <div class="form-group">
+				    <label for="exampleInputEmail1">Nombres</label>
+				    <input type="text" class="form-control" id="idNombre" name="nombre" placeholder="Ingresar nombres">
+				  </div>
+				  <div class="form-group">
+				    <label for="exampleInputPassword1">Apellido</label>
+				    <input type="text" class="form-control" id="idApellido" name="apellido" placeholder="Ingresar apellido">
+				  </div>
+				  <div class="form-group">
+				    <label for="exampleInputPassword1">DNI</label>
+				    <input type="text" class="form-control" id="idDni" name="dni" placeholder="Ingresar DNI">
+				  </div>
+				  <div class="form-group">
+				    <label for="exampleInputPassword1">Fecha de nacimiento</label>
+				    <input type="text" class="form-control" id="idFecnac" name="fecnac" placeholder="yyyy-mm-dd">
+				  </div>
+				  <div class="form-group">
+				    <label for="exampleInputPassword1">Correo</label>
+				    <input type="text" class="form-control" id="idCorreo" name="correo" placeholder="Ingresar correo">
+				  </div>
+				  <div class="form-group">
+				    <label for="exampleInputPassword1">Telefono</label>
+				    <input type="text" class="form-control" id="idTelefono" name="telefono" placeholder="Ingresar Telefono">
+				  </div>				 
+				  <div class="form-group">
+				    <label for="exampleInputPassword1">Cargo</label>
+				    <select class="form-control" id="idCargo" name="carcod">
+				      <option value=" ">[Seleccione Cargo]</option>
+				    </select>
+				  </div>
+				  <div class="form-group">
+				    <label for="exampleInputPassword1">Contraseña</label>
+				    <input type="password" class="form-control" id="idContrasena" name="contrasena" placeholder="Ingresar contrasena">
+				  </div>				  
+				  <div class="modal-footer">
+			        <button type="submit" class="btn btn-primary" style = "background-color:#191796">Guardar</button>
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn-cerrar">Cerrar</button>			        
+			      </div>
+				</form>
+		      </div>
+		      
+		    </div>
+		  </div>
+		</div>
+  		<!-- FIN - Modal PARA REGISTRAR Y ACTUALIZAR Trabajador-->
+  		<!-- INICIO - Modal PARA ELIMINAR trabajador-->
+		<div class="modal fade" id="modalEliminar" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="staticBackdropLabel">SISTEMA</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <form id="formTrabajador"  action="ServletTrabajador?ACCION=ELIMINAR" method="post">
+		         	    <input type="hidden" class="form-control" id="idCodigoEliminar" name="codigoEliminar">
+				  SEGURO DE ELIMINAR ?
+				  <div class="modal-footer">
+			        <button type="submit" class="btn btn-primary">SI</button>
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">NO</button>			        
+			      </div>
+				</form>
+		      </div>
+		      
+		    </div>
+		  </div>
+		</div>
+  		<!-- FIN - Modal PARA ELIMINAR Eliminar-->  	
+  	</div>
+
+
+    <!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+	<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+	<script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.js"></script>
+	<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+	
+	<script>
+	    $(document).ready(function(){
+	        var date_input=$('input[name="fecnac"]');
+	        date_input.datepicker({
+	            format: 'yyyy-mm-dd',
+	            minViewMode: 3,
+	            language: "es",
+	            //todayHighlight: true,
+	            autoclose: true,
+	        })
+	    })
+	</script>
+	<script>
+	$(document).ready(function() {
+	    $('#tableTrabajador').DataTable();
+	    llenarCargo();
+	} );
+	
+	//asignar evento click a los botones con clase "btn-editar"
+	$(document).on("click",".btn-editar",function(){
+		//variables
+		var cod,nom,ape,dni,fec,correo,tele,carcod,contra;
+		//obtener valores de la fila actual según donde se haga clic al botón editar
+		cod=$(this).parents("tr").find("td")[0].innerHTML;
+		nom=$(this).parents("tr").find("td")[1].innerHTML;
+		ape=$(this).parents("tr").find("td")[2].innerHTML;
+		dni=$(this).parents("tr").find("td")[3].innerHTML;
+		fec=$(this).parents("tr").find("td")[4].innerHTML;
+		correo=$(this).parents("tr").find("td")[5].innerHTML;
+		tele=$(this).parents("tr").find("td")[6].innerHTML;
+		carcod=$(this).parents("tr").find("td")[7].innerHTML;
+		contra=$(this).parents("tr").find("td")[8].innerHTML;
+		
+		//mostrar los valores de las variables en los controles(cajas y select)
+		$("#idCodigo").val(cod);
+		$("#idNombre").val(nom);
+		$("#idApellido").val(ape);
+		$("#idDni").val(dni);
+		$("#idFecnac").val(fec);
+		$("#idCorreo").val(correo);
+		$("#idTelefono").val(tele);
+		$("#idCargo").val(carcod);
+		$("#idContrasena").val(contra);
+	})
+	
+		$(document).on("click",".btn-eliminar",function(){
+			//variables
+			var cod;
+			//obtener código de la fila actual según donde se haga clic al botón editar
+			cod=$(this).parents("tr").find("td")[0].innerHTML;
+			//
+			$("#idCodigoEliminar").val(cod);
+		
+		})
+		
+	$(document).on("click","#btn-cerrar",function(){
+			 //resetear validación 
+			$('#formTrabajador'). data("bootstrapValidator").resetForm(true);
+			 //limpiar cajas
+			 $('#formTrabajador').trigger("reset");
+			 //asignar "0" a la caja con ID "idCodigo" 
+			 $("#idCodigo").val(0);
+		})
+	
+	function llenarCargo(){
+	
+		$.getJSON("ServletCargoJSON",{},function(response){
+			//bucle para realizar recorrido sobre "response"
+			$.each(response,function(index,item){
+				$("#idCargo").append("<option value='"+item.codigo+"'>"+item.nombre+"</option>");
+			})
+			
+		})
+		
+	}
+	</script>
+	<script type="text/javascript">    
+    $(document).ready(function(){     
+        $('#formTrabajador').bootstrapValidator({      
+        	 fields:{
+        		 	nombre:{
+        		 		validators:{
+        		 			notEmpty:{
+        		 				message:'Campo nombre es obligatorio'
+        		 			},
+        		 			regexp:{
+        		 				regexp:/^[a-zA-Z\s\ñ\Ñ\á\é\í\ó\ú\Á\É\Í\Ó\Ú]{3,15}$/,
+        		 				message:'Campo nombre solo letras mínimo 3 y máximo 15'
+        		 			}
+        		 		}
+        		 	},
+        		 	apellido:{
+        		 		validators:{
+        		 			notEmpty:{
+        		 				message:'Campo apellido es obligatorio'
+        		 			},
+        		 			regexp:{
+        		 				regexp:/^[a-zA-Z\s\ñ\Ñ\á\é\í\ó\ú\Á\É\Í\Ó\Ú]{3,15}$/,
+        		 				message:'Campo apellido solo letras mínimo 3 y máximo 15'
+        		 			}
+        		 		}
+        		 	},
+        		 	dni:{
+        		 		validators:{
+        		 			notEmpty:{
+        		 				message:'Campo apellido dni es obligatorio'
+        		 			},
+        		 			regexp:{
+        		 				regexp:/^[0-9]{8}$/,
+        		 				message:'Campo DNI solo numeros, 8 digitos'
+        		 			}
+        		 		}
+        		 	},
+        		 	fecnac:{
+        		 		validators:{
+        		 			notEmpty:{
+        		 				message:'Campo Fecha de nacimiento es obligatorio(yyyy-mm-dd)'
+        		 			},
+       		 			 regexp:{
+	        					 regexp:/^\d{4}-\d{2}-\d{2}$/,
+	        					 message:'Formato: yyyy-mm-dd'
+	        				 }
+        		 		}
+        		 	},
+        		 	correo:{
+        		 		validators:{
+        		 			notEmpty:{
+        		 				message:'Campo correo es obligatorio'
+        		 			},
+        		 			regexp:{
+        		 				regexp:/\S+@\S+\.\S+/,
+        		 				message:'Campo Correo como aa@aa.aa'
+        		 			}
+        		 		}
+        		 	},
+        		 	telefono:{
+        		 		validators:{
+        		 			notEmpty:{
+        		 				message:'Campo telefono es obligatorio'
+        		 			},
+        		 			regexp:{
+        		 				regexp:/^[0-9]{8,15}$/,
+        		 				message:'Campo telefono solo numeros, hasta 15 digitos'
+        		 			}
+        		 		}
+        		 	},
+        		 	carcod:{
+	        			 validators:{
+	        				 notEmpty:{
+	        					 message:'Cargo es Obligatorio'
+	        				 }
+	        			 }
+	        		 },
+        		 	contrasena:{
+        		 		validators:{
+        		 			notEmpty:{
+        		 				message:'Campo contrasena es obligatorio'
+        		 			}
+        		 		}
+        		 	},     		 	
+        	 }
+        });   
+			
+    });    
+</script>
+
+</body>
+</html>
