@@ -1,4 +1,4 @@
-package model;
+package proy.serpost.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
