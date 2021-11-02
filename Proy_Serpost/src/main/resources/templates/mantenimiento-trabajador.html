@@ -216,7 +216,7 @@
 	} );
 	
 	//asignar evento click a los botones con clase "btn-editar"
-	$(document).on("click",".btn-editar",function(){
+	/*	$(document).on("click",".btn-editar",function(){
 		//variables
 		var cod,nom,ape,dni,fec,correo,tele,carcod,contra;
 		//obtener valores de la fila actual según donde se haga clic al botón editar
@@ -240,7 +240,7 @@
 		$("#idTelefono").val(tele);
 		$("#idCargo").val(carcod);
 		$("#idContrasena").val(contra);
-	})
+	})*/
 	
 		$(document).on("click",".btn-eliminar",function(){
 			//variables
@@ -261,7 +261,7 @@
 			 $("#idCodigo").val(0);
 		})
 	
-	function llenarCargo(){
+	/*function llenarCargo(){
 	
 		$.getJSON("ServletCargoJSON",{},function(response){
 			//bucle para realizar recorrido sobre "response"
@@ -271,7 +271,7 @@
 			
 		})
 		
-	}
+	}*/
 	</script>
 	<script type="text/javascript">    
     $(document).ready(function(){     
