@@ -1,4 +1,4 @@
-package controller;
+package proy.serpost.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
