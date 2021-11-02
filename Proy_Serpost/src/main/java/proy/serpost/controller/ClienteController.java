@@ -16,7 +16,7 @@ public class ClienteController {
 	private IClienteRepository repoc;
 	
 	@GetMapping("/cargarCli")
-	public String cargarPag(Model model) {
+	public String cargarCli(Model model) {
 		model.addAttribute("cliente", new Cliente());
 		model.addAttribute("lstClientes", repoc.findAll());
 		return "mantenimientoCliente";
@@ -38,15 +38,14 @@ public class ClienteController {
 	}
 	
 	@PostMapping("/editarCli")
-	public String buscarProd(@ModelAttribute Cliente c, Model model) {
+	public String buscarCli(@ModelAttribute Cliente c, Model model) {
 		System.out.println(c);
 		model.addAttribute("cliente", repoc.findById(c.getCodigoCli()));
-		model.addAttribute("lstClientes", repoc.findAll());
 		return "manteminientoCliente";
 	}
 	
 	@PostMapping("/eliminarCli")
-	public String eliminarPag(@ModelAttribute Cliente cliente, Model model) {
+	public String eliminarCli(@ModelAttribute Cliente cliente, Model model) {
 		System.out.println("Listo para eliminar");
 		System.out.println(cliente);
 		repoc.delete(cliente);
