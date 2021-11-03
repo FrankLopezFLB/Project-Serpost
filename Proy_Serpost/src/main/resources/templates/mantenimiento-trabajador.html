@@ -4,8 +4,11 @@
   
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <!-- Latest compiled and minified CSS -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<title>Mantenimiendo Trabajador</title>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
+
+<title>Mantenimiento Trabajador</title>
 	
 	<style>
 		body {
@@ -76,21 +79,21 @@
         
         <tbody>
         	<!-- en el atributo items permite recuperar el atributo "docentes" que viene del ServletDocente -->
-        	<c:forEach items="${requestScope.trabajador}" var="row">
-	            <tr>
-	                <td>${row.codigo}</td>
-	                <td>${row.nombre}</td>
-	                <td>${row.apellido}</td>
-	                <td>${row.dni}</td>
-	                <td>${row.fechanac}</td>
-	                <td>${row.correo}</td>
-	                <td>${row.telefono}</td>
-	                <td>${row.nomcargo}</td>
-	                <td  class="hidetext">${row.contrasena}</td>
+        	
+	            <tr th:each="t : ${lstTrabajador}" var="row">
+	                <td th:text="${t.codigoTra}"></td>
+	                <td th:text="${t.nombreTra}"></td>
+	                <td th:text="${t.apellidoTra}"></td>
+	                <td th:text="${t.dniTra}"></td>
+	                <td th:text="${t.fechaTaa}"></td>
+	                <td th:text="${t.correoTra}"></td>
+	                <td th:text="${t.telefonoTra}"></td>
+	                <td th:each="c : ${lstCargo}" th:if="${c.codigocargo} == ${t.codigocar}" th:text="${c.nombrecargo}"></td>
+	                <td th:text="${t.contrasena}" class="hidetext"></td>
 	                <td><button type="button" class="btn btn-info btn-editar" data-toggle="modal" data-target="#modalTrabajador">Editar</button></td>
 	                <td><button type="button" class="btn btn-danger btn-eliminar" data-toggle="modal" data-target="#modalEliminar">Eliminar</button></td>
 	            </tr>
-            </c:forEach>
+           
  		</tbody>
        </table>
 <!-- INICIO - Modal PARA REGISTRAR Y ACTUALIZAR TRABAJADOR-->
@@ -104,44 +107,44 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <form id="formTrabajador"  action="ServletTrabajador?ACCION=GUARDAR" method="post">
+		        <form id="formTrabajador"  action="/trabajador/guardar" method="post" th:object="${trabajador}">
 		         <div class="form-group" hidden>
 				    <label for="exampleInputEmail1">Código</label>  <!-- OJO CON EL VALUE Y EL CONTROLADOR -->
-				    <input type="text" class="form-control" id="idCodigo" name="codigo" value="0" readonly>
+				    <input  type="text" class="form-control" id="idCodigo" name="codigo" value="0" readonly th:field="*{codigoTra}">
 				  </div>
 				  <div class="form-group">
 				    <label for="exampleInputEmail1">Nombres</label>
-				    <input type="text" class="form-control" id="idNombre" name="nombre" placeholder="Ingresar nombres">
+				    <input   type="text" class="form-control" id="idNombre" name="nombre" placeholder="Ingresar nombres" th:field="*{nombreTra}">
 				  </div>
 				  <div class="form-group">
 				    <label for="exampleInputPassword1">Apellido</label>
-				    <input type="text" class="form-control" id="idApellido" name="apellido" placeholder="Ingresar apellido">
+				    <input  type="text" class="form-control" id="idApellido" name="apellido" placeholder="Ingresar apellido" th:field="*{apellidoTra}" >
 				  </div>
 				  <div class="form-group">
 				    <label for="exampleInputPassword1">DNI</label>
-				    <input type="text" class="form-control" id="idDni" name="dni" placeholder="Ingresar DNI">
+				    <input   type="text" class="form-control" id="idDni" name="dni" placeholder="Ingresar DNI" th:field="*{dniTra}">
 				  </div>
 				  <div class="form-group">
 				    <label for="exampleInputPassword1">Fecha de nacimiento</label>
-				    <input type="text" class="form-control" id="idFecnac" name="fecnac" placeholder="yyyy-mm-dd">
+				    <input   type="text" class="form-control" id="idFecnac" name="fecnac" placeholder="yyyy-mm-dd" th:field="*{fechaTaa}">
 				  </div>
 				  <div class="form-group">
 				    <label for="exampleInputPassword1">Correo</label>
-				    <input type="text" class="form-control" id="idCorreo" name="correo" placeholder="Ingresar correo">
+				    <input   type="text" class="form-control" id="idCorreo" name="correo" placeholder="Ingresar correo" th:field="*{correoTra}">
 				  </div>
 				  <div class="form-group">
 				    <label for="exampleInputPassword1">Telefono</label>
-				    <input type="text" class="form-control" id="idTelefono" name="telefono" placeholder="Ingresar Telefono">
+				    <input   type="text" class="form-control" id="idTelefono" name="telefono" placeholder="Ingresar Telefono" th:field="*{telefonoTra}">
 				  </div>				 
 				  <div class="form-group">
 				    <label for="exampleInputPassword1">Cargo</label>
-				    <select class="form-control" id="idCargo" name="carcod">
-				      <option value=" ">[Seleccione Cargo]</option>
+				    <select   class="form-control" id="idCargo" name="carcod" th:field="*{codigocar}">
+				     	<option value="-1">[Seleccione Cargo]</option>
 				    </select>
 				  </div>
 				  <div class="form-group">
 				    <label for="exampleInputPassword1">Contraseña</label>
-				    <input type="password" class="form-control" id="idContrasena" name="contrasena" placeholder="Ingresar contrasena">
+				    <input   type="password" class="form-control" id="idContrasena" name="contrasena" placeholder="Ingresar contrasena" th:field="*{contrasena}">
 				  </div>				  
 				  <div class="modal-footer">
 			        <button type="submit" class="btn btn-primary" style = "background-color:#191796">Guardar</button>
@@ -165,8 +168,8 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <form id="formTrabajador"  action="ServletTrabajador?ACCION=ELIMINAR" method="post">
-		         	    <input type="hidden" class="form-control" id="idCodigoEliminar" name="codigoEliminar">
+		        <form id="formTrabajador"  action="/trabajador/eliminar" method="post">
+		         	    <input type="hidden" class="form-control" id="idCodigoEliminar" name="codigoTra"  >
 				  SEGURO DE ELIMINAR ?
 				  <div class="modal-footer">
 			        <button type="submit" class="btn btn-primary">SI</button>
@@ -181,25 +184,24 @@
   		<!-- FIN - Modal PARA ELIMINAR Eliminar-->  	
   	</div>
 
+  	<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.js" ></script>
+	
+	
+	<script src ="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
 
-    <!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<!-- Popper JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-	<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-	<script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.js"></script>
-	<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+	<!-- Bootstrap Date-Picker Plugin -->
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 	
+	
+	
 	<script>
 	    $(document).ready(function(){
-	        var date_input=$('input[name="fecnac"]');
+	        var date_input=$('input[name="fechaTaa"]');
 	        date_input.datepicker({
 	            format: 'yyyy-mm-dd',
 	            minViewMode: 3,
@@ -209,14 +211,34 @@
 	        })
 	    })
 	</script>
+	
+		
+	<script th:inline="javascript">
+	//PARA LLENAR COMBO DE CARGO
+		/*<![CDATA[*/
+		var listaCargo = /*[[${lstCargo}]]*/ 'lista_vacia';
+		/*]]>*/
+		console.log(listaCargo);
+		
+		var select = document.getElementById('idCargo');
+		
+		for(var i = 0; i < listaCargo.length; i++) {
+		    var opt = listaCargo[i];
+		    var el = document.createElement("option");
+		    el.value = listaCargo[i].codigocargo;
+		    el.textContent = listaCargo[i].nombrecargo;
+		    select.appendChild(el);
+		}
+		
+	</script>
 	<script>
 	$(document).ready(function() {
 	    $('#tableTrabajador').DataTable();
-	    llenarCargo();
+	    //llenarCargo();
 	} );
 	
 	//asignar evento click a los botones con clase "btn-editar"
-	/*	$(document).on("click",".btn-editar",function(){
+		$(document).on("click",".btn-editar",function(){
 		//variables
 		var cod,nom,ape,dni,fec,correo,tele,carcod,contra;
 		//obtener valores de la fila actual según donde se haga clic al botón editar
@@ -240,7 +262,7 @@
 		$("#idTelefono").val(tele);
 		$("#idCargo").val(carcod);
 		$("#idContrasena").val(contra);
-	})*/
+	})
 	
 		$(document).on("click",".btn-eliminar",function(){
 			//variables
@@ -277,7 +299,7 @@
     $(document).ready(function(){     
         $('#formTrabajador').bootstrapValidator({      
         	 fields:{
-        		 	nombre:{
+        		 	nombreTra:{
         		 		validators:{
         		 			notEmpty:{
         		 				message:'Campo nombre es obligatorio'
@@ -288,7 +310,7 @@
         		 			}
         		 		}
         		 	},
-        		 	apellido:{
+        		 	apellidoTra:{
         		 		validators:{
         		 			notEmpty:{
         		 				message:'Campo apellido es obligatorio'
@@ -299,7 +321,7 @@
         		 			}
         		 		}
         		 	},
-        		 	dni:{
+        		 	dniTra:{
         		 		validators:{
         		 			notEmpty:{
         		 				message:'Campo apellido dni es obligatorio'
@@ -310,7 +332,7 @@
         		 			}
         		 		}
         		 	},
-        		 	fecnac:{
+        		 	fechaTaa:{
         		 		validators:{
         		 			notEmpty:{
         		 				message:'Campo Fecha de nacimiento es obligatorio(yyyy-mm-dd)'
@@ -321,7 +343,7 @@
 	        				 }
         		 		}
         		 	},
-        		 	correo:{
+        		 	correoTra:{
         		 		validators:{
         		 			notEmpty:{
         		 				message:'Campo correo es obligatorio'
@@ -332,7 +354,7 @@
         		 			}
         		 		}
         		 	},
-        		 	telefono:{
+        		 	telefonoTra:{
         		 		validators:{
         		 			notEmpty:{
         		 				message:'Campo telefono es obligatorio'
@@ -343,7 +365,7 @@
         		 			}
         		 		}
         		 	},
-        		 	carcod:{
+        		 	codigocar:{
 	        			 validators:{
 	        				 notEmpty:{
 	        					 message:'Cargo es Obligatorio'

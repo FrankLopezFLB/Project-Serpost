@@ -536,6 +536,7 @@ END //
 DELIMITER ;
 /*----------------------------------------------------------------------------------*/
 /* PROCEDURE ACTUALIZAR DESTINO */
+
 DELIMITER //
 CREATE PROCEDURE ACTUALIZAR_DESTINO(
 IN
@@ -937,3 +938,4 @@ BEGIN
 END //
 DELIMITER ;
 /*----------------------------------------------------------------------------------*/
+
