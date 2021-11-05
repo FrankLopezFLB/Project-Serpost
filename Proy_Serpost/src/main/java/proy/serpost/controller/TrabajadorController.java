@@ -25,6 +25,13 @@ public class TrabajadorController {
 	@Autowired
 	private ICargoRepository repoCargo;
 	
+	
+	
+	@GetMapping("/cargarLogin")
+	public String cargarLog(Model model) {
+		model.addAttribute("trabajador", new Trabajador());
+		return "login";
+	}
 	@GetMapping("/cargar")
 	public String cargarPag(Model model) {
 		model.addAttribute("trabajador", new Trabajador());
@@ -47,10 +54,22 @@ public class TrabajadorController {
 	}
 	
 	@PostMapping("/eliminar")
-	public String eliminarLibro (@ModelAttribute Trabajador t, Model model ) {
+	public String eliminarTrabajador(@ModelAttribute Trabajador t, Model model ) {
 		repo.deleteById(t.getCodigoTra());
 		model.addAttribute("lstTrabajador",repo.findAll());
 		return "redirect:/trabajador/cargar";
 	}
 	
-}
+	@PostMapping("/validar")
+	public String validarPag(@ModelAttribute Trabajador trabajador, Model model) {
+	
+		Trabajador t=repo.findByCorreoTraAndContrasena(trabajador.getCorreoTra(), trabajador.getContrasena());
+		if(t==null) {
+			model.addAttribute("mensaje","Usuario o clave incorrecto");
+			return "login";
+		}else {
+			model.addAttribute("trabajador",t);
+			return "redirect:/trabajador/cargar";
+		}
+		}
+	}

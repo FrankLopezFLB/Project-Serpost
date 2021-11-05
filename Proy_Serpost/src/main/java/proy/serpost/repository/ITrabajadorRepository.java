@@ -8,5 +8,6 @@ import proy.serpost.model.Trabajador;
 
 @Repository
 public interface ITrabajadorRepository extends JpaRepository<Trabajador,Integer> {
-
+	
+	Trabajador findByCorreoTraAndContrasena(String correoTra, String contrasena);
 }
