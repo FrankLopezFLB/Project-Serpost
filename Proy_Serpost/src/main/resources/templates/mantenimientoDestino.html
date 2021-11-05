@@ -137,7 +137,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="staticBackdropLabel">Destino</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-cerrar">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
@@ -169,7 +169,7 @@
 							<div class="form-group">
 								<label for="exampleInputPassword1">Region</label>
 								<select class="form-control" id="idRegionDes" name="regionDes" th:field="*{codregion}">
-									<option value="-1">[Seleccione Region]</option>
+									<option disabled value="-1">[Seleccione Region]</option>
 
 									<!-- <option th:value="-1" th:text="[Seleccione Region]"></option>
 									
@@ -201,7 +201,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="staticBackdropLabel">Eliminar Destino</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btn-cerrar">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
@@ -327,21 +327,21 @@
 							}
 						}
 					},
-					paisDes: {
+					pais: {
 						validators: {
 							notEmpty: {
 								message: 'Pais es obligatorio'
 							}
 						}
 					},
-					ciudadDes: {
+					ciudad: {
 						validators: {
 							notEmpty: {
 								message: 'Region es obligatorio'
 							}
 						}
 					},
-					codigoPostalDes: {
+					codpostal: {
 						validators: {
 							notEmpty: {
 								message: 'Codigo Postal es obligatorio'
@@ -352,11 +352,15 @@
 							}
 						}
 					},
-					regionDes: {
+					codregion: {
 						validators: {
-							notEmpty: {
+							greaterThan: {
+								value: 0,
 								message: 'Campo Region es obligatorio'
-							}
+							},
+							/*notEmpty: {
+								message: 'Campo Region es obligatorio'
+							}*/
 						}
 					}
 				}
