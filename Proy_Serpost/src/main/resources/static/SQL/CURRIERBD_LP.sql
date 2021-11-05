@@ -735,13 +735,12 @@ DESC_MENU	VARCHAR(100),
 URL_MENU	VARCHAR(120)
 );	
 
-INSERT INTO MENU values(null,'Mantenimiento Trabajador','ServletTrabajador?ACCION=LISTAR');
-INSERT INTO MENU values(null,'Mantenimiento Vehiculo','ServletVehiculo?ACCION=LISTAR');
-INSERT INTO MENU values(null,'Mantenimiento Destino','ServletDestino?ACCION=LISTAR');
-INSERT INTO MENU values(null,'Mantenimiento Cliente','ServletCliente?ACCION=LISTAR');
-INSERT INTO MENU values(null,'Reporte tipo','reportetipo.jsp');
-INSERT INTO MENU values(null,'Reporte fecha','reportefecha.jsp');
-INSERT INTO MENU values(null,'Envios','ServletRequerimiento?ACCION=LISTAR');
+INSERT INTO MENU values(null,'Mantenimiento Trabajador','/trabajador/cargar');
+INSERT INTO MENU values(null,'Mantenimiento Vehiculo','/vehiculo/cargar');
+INSERT INTO MENU values(null,'Mantenimiento Destino','/destino/cargar');
+INSERT INTO MENU values(null,'Mantenimiento Cliente','/cliente/cargar');
+INSERT INTO MENU values(null,'Reporte tipo','/cargarReporteTipo');
+INSERT INTO MENU values(null,'Reporte fecha','/cargarReporteFecha');
 
 /*---------------------------ACCESO-----------------------------*/
 
@@ -758,11 +757,10 @@ INSERT INTO ACCESO VALUES(3,1);
 INSERT INTO ACCESO VALUES(4,1);
 INSERT INTO ACCESO VALUES(5,1);
 INSERT INTO ACCESO VALUES(6,1);
-INSERT INTO ACCESO VALUES(7,1);
 INSERT INTO ACCESO VALUES(4,5);
 INSERT INTO ACCESO VALUES(5,5);
 INSERT INTO ACCESO VALUES(6,5);
-INSERT INTO ACCESO VALUES(7,5);
+
 
 /*-------------------CLIENTE----------------------*/
 CREATE TABLE CLIENTE
@@ -939,3 +937,4 @@ END //
 DELIMITER ;
 /*----------------------------------------------------------------------------------*/
 
+select*from MENU;

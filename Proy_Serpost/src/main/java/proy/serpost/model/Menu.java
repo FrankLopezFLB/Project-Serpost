@@ -12,12 +12,17 @@ public class Menu {
 	private int codigoMenu;
 	@Column(name="DESC_MENU")
 	private String nombreMenu;
+	public Menu() {
+		super();
+	}
 	@Column(name="URL_MENU")
 	private String urlMenu;
+	
 	@Override
 	public String toString() {
 		return "Menu [codigoMenu=" + codigoMenu + ", nombreMenu=" + nombreMenu + ", urlMenu=" + urlMenu + "]";
 	}
+	
 	public Menu(int codigoMenu, String nombreMenu, String urlMenu) {
 		super();
 		this.codigoMenu = codigoMenu;
@@ -42,6 +47,8 @@ public class Menu {
 	public void setUrlMenu(String urlMenu) {
 		this.urlMenu = urlMenu;
 	}
+
+
 	
 	
 	
