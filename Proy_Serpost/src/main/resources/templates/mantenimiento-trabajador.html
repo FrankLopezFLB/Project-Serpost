@@ -72,6 +72,7 @@
                 <th>NACIMIENTO</th>
                 <th>CORREO</th>
                 <th>TELEFONO</th>
+                <th style="display:none;">CARGO</th>
                 <th>CARGO</th>
                 <th>CONTRASEÑA</th>
                 <th></th>
@@ -90,6 +91,7 @@
 	                <td th:text="${t.fechaTaa}"></td>
 	                <td th:text="${t.correoTra}"></td>
 	                <td th:text="${t.telefonoTra}"></td>
+	                <td style="display:none;" th:text="${t.codigocar}"></td>
 	                <td th:each="c : ${lstCargo}" th:if="${c.codigocargo} == ${t.codigocar}" th:text="${c.nombrecargo}"></td>
 	                <td th:text="${t.contrasena}" class="hidetext"></td>
 	                <td><button type="button" class="btn btn-info btn-editar" data-toggle="modal" data-target="#modalTrabajador">Editar</button></td>
@@ -105,7 +107,7 @@
 		      <div class="modal-header">
 		        <h5 class="modal-title" id="staticBackdropLabel">Trabajador</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true">&times;</span>
+		          <span aria-hidden="true" id="btn-cerrar">&times;</span>
 		        </button>
 		      </div>
 		      <div class="modal-body">
@@ -140,7 +142,7 @@
 				  </div>				 
 				  <div class="form-group">
 				    <label for="exampleInputPassword1">Cargo</label>
-				    <select   class="form-control" id="idCargo" name="carcod" th:field="*{codigocar}">
+				    <select   class="form-control" id="idCargo" name="codigocar" th:field="*{codigocar}">
 				     	<option value="-1">[Seleccione Cargo]</option>
 				    </select>
 				  </div>
@@ -252,8 +254,8 @@
 		correo=$(this).parents("tr").find("td")[5].innerHTML;
 		tele=$(this).parents("tr").find("td")[6].innerHTML;
 		carcod=$(this).parents("tr").find("td")[7].innerHTML;
-		contra=$(this).parents("tr").find("td")[8].innerHTML;
-		
+		contra=$(this).parents("tr").find("td")[9].innerHTML;
+		debugger;
 		//mostrar los valores de las variables en los controles(cajas y select)
 		$("#idCodigo").val(cod);
 		$("#idNombre").val(nom);

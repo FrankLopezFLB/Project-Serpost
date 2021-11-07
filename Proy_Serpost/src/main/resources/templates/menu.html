@@ -52,7 +52,7 @@
 	  	</div>
 	  
 	  <div class="collapse navbar-collapse" style = "background-color:#191796">
-		  <ul class="navbar-nav" th:each="m : ${lstMenu}">
+		  <ul class="navbar-nav" th:each="m : ${session.lstMenu}">
 		  	    <li class="nav-item" >
 			      <a class="nav-link" th:href="@{${m.urlMenu}}" th:text="${m.nombreMenu}" ></a>
 			    </li>

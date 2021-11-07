@@ -1,5 +1,7 @@
 package proy.serpost.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import proy.serpost.model.Menu;
 import proy.serpost.model.Trabajador;
 
 import proy.serpost.repository.ICargoRepository;
@@ -31,15 +34,16 @@ public class TrabajadorController {
 	@Autowired
 	private IMenuRepository	repoMenu;
 	
+	
 	@GetMapping("/cargarLogin")
 	public String cargarLog(Model model) {
 		model.addAttribute("trabajador", new Trabajador());
 		return "login";
 	}
 	@GetMapping("/cargar")
-	public String cargarPag(Model model) {
-		model.addAttribute("trabajador", new Trabajador());
-		model.addAttribute("lstMenu",repoMenu.findAll());
+	public String cargarPag(HttpSession session,@ModelAttribute Trabajador trabajador, Model model) {		
+
+		model.addAttribute("trabajador", new Trabajador());	
 		model.addAttribute("lstCargo",repoCargo.findAll());
 		model.addAttribute("lstTrabajador",repo.findAll());
 		System.out.println("Listado abierto");
@@ -64,32 +68,24 @@ public class TrabajadorController {
 		model.addAttribute("lstTrabajador",repo.findAll());
 		return "redirect:/trabajador/cargar";
 	}
-	
-	/*@PostMapping("/validar")
-	public String validarPag(@ModelAttribute Trabajador trabajador, Model model) {
-	
-		Trabajador t=repo.findByCorreoTraAndContrasena(trabajador.getCorreoTra(), trabajador.getContrasena());
-		if(t==null) {
-			model.addAttribute("mensaje","Usuario o clave incorrecto");
-			return "login";
-		}else {
-			model.addAttribute("nomTrabajador",trabajador.getNombreTra());
-			model.addAttribute("trabajador",t);
-			return "redirect:/trabajador/cargar";
-		}
-		}*/
+
 	@PostMapping("/validar")
 	public String validarPag(HttpSession session,@ModelAttribute Trabajador trabajador, Model model) {
-	
+		
 		Trabajador t=repo.findByCorreoTraAndContrasena(trabajador.getCorreoTra(), trabajador.getContrasena());
 		if(t==null) {
 			model.addAttribute("mensaje","Usuario o clave incorrecto");
 			return "login";
 		}else {
-			
+			session.setAttribute("auxtrabajador", t);
 			System.out.println("Listado de menu abierto");
 			session.setAttribute("DATOS",t.getNombreTra()+" "+t.getApellidoTra());
-			model.addAttribute("lstMenu",repoMenu.findAll());
+			//session.setAttribute("acces", t.getCodigoTra());
+			List<Menu> menuaux=repoMenu.spMenu(t.getCodigoTra());
+			session.setAttribute("lstMenu",menuaux);	
+			System.out.println("--------------");
+			System.out.println(menuaux);
+			System.out.println(t.getCodigoTra());
 			model.addAttribute("trabajador",t);
 			return "redirect:/trabajador/cargar";
 		}
