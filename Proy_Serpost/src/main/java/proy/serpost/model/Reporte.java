@@ -1,5 +1,4 @@
 package proy.serpost.model;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -87,4 +86,5 @@ public class Reporte {
 				+ ", tipoobjeto=" + tipoobjeto + "]";
 	}
 	
+
 }

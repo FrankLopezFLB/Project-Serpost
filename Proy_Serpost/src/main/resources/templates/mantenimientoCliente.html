@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- JSTL / CustomTag -->
+
+<head>
+	<title>Mantenimiendo Cliente</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<style>
+		body {
+			background: #eee;
+		}
+
+		.modal-header {
+			color: #191796;
+			background: #CCE5FF;
+			display: flex;
+			justify-content: center;
+
+		}
+
+		.tits {
+			font-size: 35pt;
+			font-family: georgia;
+		}
+
+		.help-block {
+			color: red;
+		}
+
+		.form-group.has-error .form-control-label {
+			color: red;
+		}
+
+		.form-group.has-error .form-control {
+			border: 1px solid red;
+			box-shadow: 0 0 0 0.2rem rgba(250, 16, 0, 0.18);
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<br>
+		<br>
+		<h2 class="text-center tits">Matenimiento de Clientes</h2>
+		<br>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="staticBackdropLabel">Cliente</h5>
+				</div>
+				<div class="modal-body">
+					<form id="formCliente" action="/grabarCli" method="post" th:object="${cliente}">
+						<div class="form-group" hidden>
+							<label for="exampleInputEmail1">Código</label>
+							<!-- OJO CON EL VALUE Y EL CONTROLADOR -->
+							<input type="text" class="form-control" th:field="*{codigoCli}" id="idCodigo" name="codigo"
+								value="0" readonly>
+						</div>
+						<div class="form-group">
+							<label for="exampleInputEmail1">Nombres</label>
+							<input type="text" class="form-control" th:field="*{nombreCli}" id="idNombre" name="nombre"
+								placeholder="Ingresar nombres">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Apellido</label>
+							<input type="text" class="form-control" th:field="*{apellidoCli}" id="idApellido"
+								name="apellido" placeholder="Ingresar apellido">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">DNI</label>
+							<input type="text" class="form-control" th:field="*{dniCli}" id="idDni" name="dni"
+								placeholder="Ingresar DNI">
+						</div>
+
+						<div class="form-group">
+							<label for="exampleInputPassword1">Telefono</label>
+							<input type="text" class="form-control" th:field="*{telefonoCli}" id="idTelefono"
+								name="telefono" placeholder="Ingresar Telefono">
+						</div>
+						<div class="form-group">
+							<label for="exampleInputPassword1">Correo</label>
+							<input type="text" class="form-control" th:field="*{correoCli}" id="idCorreo" name="correo"
+								placeholder="Ingresar correo">
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary"
+								style="background-color:#191796">Guardar</button>
+							<button type="button" class="btn btn-secondary" data-dismiss="modal"
+								id="btn-cerrar">Cerrar</button>
+							<a href="/listarCli" class="btn btn-primary">Listar</a>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+
+		<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+		<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+			crossorigin="anonymous"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.js"></script>
+
+
+		<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+		<script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+
+		<script>
+
+			$(document).on("click", "#btn-cerrar", function () {
+				//resetear validación 
+				$('#formCliente').data("bootstrapValidator").resetForm(true);
+				//limpiar cajas
+				$('#formCliente').trigger("reset");
+				//asignar "0" a la caja con ID "idCodigo" 
+				$("#idCodigo").val(0);
+			})
+
+
+
+		</script>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$('#formCliente').bootstrapValidator({
+					fields: {
+						nombre: {
+							validators: {
+								notEmpty: {
+									message: 'Campo nombre es obligatorio'
+								},
+								regexp: {
+									regexp: /^[a-zA-Z\s\ñ\Ñ\á\é\í\ó\ú\Á\É\Í\Ó\Ú]{3,15}$/,
+									message: 'Campo nombre solo letras mínimo 3 y máximo 15'
+								}
+							}
+						},
+						apellido: {
+							validators: {
+								notEmpty: {
+									message: 'Campo apellido es obligatorio'
+								},
+								regexp: {
+									regexp: /^[a-zA-Z\s\ñ\Ñ\á\é\í\ó\ú\Á\É\Í\Ó\Ú]{3,15}$/,
+									message: 'Campo apellido solo letras mínimo 3 y máximo 15'
+								}
+							}
+						},
+						dni: {
+							validators: {
+								notEmpty: {
+									message: 'Campo apellido dni es obligatorio'
+								},
+								regexp: {
+									regexp: /^[0-9]{8}$/,
+									message: 'Campo DNI solo numeros, 8 digitos'
+								}
+							}
+						},
+
+
+						telefono: {
+							validators: {
+								notEmpty: {
+									message: 'Campo telefono es obligatorio'
+								},
+								regexp: {
+									regexp: /^[0-9]{8,15}$/,
+									message: 'Campo telefono solo numeros, hasta 15 digitos'
+								}
+							}
+						},
+						correo: {
+							validators: {
+								notEmpty: {
+									message: 'Campo correo es obligatorio'
+								},
+								regexp: {
+									regexp: /\S+@\S+\.\S+/,
+									message: 'Campo Correo como aa@aa.aa'
+								}
+							}
+						},
+					}
+				});
+
+			});    
+		</script>
+</body>
+
+</html>

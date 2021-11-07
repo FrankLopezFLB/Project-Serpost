@@ -1,7 +1,7 @@
 package proy.serpost.controller;
 
-import java.util.List;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +17,7 @@ import proy.serpost.repository.IRepositoryTipoObjeto;
 
 @Controller
 public class ReporteController {
-	
+
 	/*  R E P O S I T O R I O S  */
 	
 	@Autowired
@@ -71,3 +71,4 @@ public class ReporteController {
 		return "reportefecha";
 	}
 }
+
