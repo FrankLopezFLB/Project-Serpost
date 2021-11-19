@@ -37,6 +37,8 @@
 	</style>
 </head>
 <body>
+<div th:replace="menu::header">
+</div>
 
 	<div class="container">
 		<br>
@@ -71,7 +73,7 @@
 	            <td th:text="${v.modelo}"></td>
 	        	<td th:text="${v.fechaAd}"></td>
 	        	<td style="display:none;" th:text="${v.codConductor}"></td>
-	        	<td th:each="c : ${lstConductores}" th:if="${c.codigo} == ${v.codConductor}" th:text="${c.nombre}"></td>
+	        	<td th:each="c : ${lstConductor}" th:if="${c.codigo} == ${v.codConductor}" th:text="${c.nombre}"></td>
 	        	<td><button type="button" class="btn btn-info btn-editar" data-toggle="modal" data-target="#modalVehiculo">Editar</button></td>
 				<td><button type="button" class="btn btn-danger btn-eliminar" data-toggle="modal" data-target="#modalVehiculo">Eliminar</button></td>
         	</tr>
@@ -90,10 +92,10 @@
 		      
 		      <!-- FORMULARIO PARA GRABAR -->
 		      <div class="modal-body">
-		        <form id="formVehiculo" action="/vehiculo/guardar" method="POST" th:object="${vehiculo}">
+		        <form id="formVehiculo" action="/vehiculo/guardar" method="post" th:object="${vehiculo}">
 		        	<div class="form-group" hidden>
 					    <label for="exampleInputEmail1">Codigo</label>
-					    <input type="text" class="form-control" id="idCodigoVeh" name="codigoVeh" value="vacio">
+					    <input type="text" class="form-control" id="idCodigoVeh" name="codigoVeh" value="vacio" th:field="*{codigo}">
 				 	</div>
 				 	<div class="form-group">
 					    <label for="exampleInputEmail1">Matricula</label>
@@ -101,22 +103,22 @@
 				 	</div>
 				 	<div class="form-group">
 					    <label for="exampleInputPassword1">Marca</label>
-					    <input type="text" class="form-control" id="idMarcaVeh" name="marcaVeh" placeholder="Ingresar Marca">
+					    <input type="text" class="form-control" id="idMarcaVeh" name="marcaVeh" placeholder="Ingresar Marca" th:field="*{marca}">
 				 	</div>
 				  	<div class="form-group">
 					    <label for="exampleInputPassword1">Modelo</label>
-					    <input type="text" class="form-control" id="idModeloVeh" name="modeloVeh" placeholder="Ingresar Modelo">
+					    <input type="text" class="form-control" id="idModeloVeh" name="modeloVeh" placeholder="Ingresar Modelo" th:field="*{modelo}">
 				  	</div>
 				  	<div class="form-group"> <!-- Date input -->
 				        <label class="control-label" for="date">Fecha de Adquisicion</label>
-				        <input class="form-control" id="idFecProVeh" name="fecProVeh" placeholder="dd/mm/YYYY" type="text"/>
+				        <input class="form-control" id="idFecProVeh" name="fecProVeh" placeholder="dd/mm/YYYY" th:field="*{fechaAd}" >
       			  	</div>
 				  
 				  
 				  <div class="form-group">
 				    <label for="exampleInputPassword1">Conductor</label>
-				    <select class="form-control" id="idConductor" name="conductor">
-				      <option value=" ">[Seleccione Conductor]</option>
+				    <select class="form-control" id="idConductor" name="codConductor" th:field="*{codConductor}">
+				      <option value="-1">[Seleccione Conductor]</option>
 				    </select>
 				  </div>
 				  
@@ -135,7 +137,7 @@
  		
 	</div>
 	
-	<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 	<script src="https://cdn.bootcdn.net/ajax/libs/bootstrap-validator/0.5.3/js/bootstrapValidator.js" ></script>
@@ -150,7 +152,7 @@
 	
 	<script>
 	    $(document).ready(function(){
-	        var date_input=$('input[name="fecProVeh"]');
+	        var date_input=$('input[name="fechaAd"]');
 	        date_input.datepicker({
 	            format: 'dd/mm/yyyy',
 	            minViewMode: 3,
@@ -160,7 +162,23 @@
 	    })
 	</script>
 	
-	
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		var listaConductor = /*[[${lstConductor}]]*/ 'lista_vacia';
+		/*]]>*/
+		console.log(listaConductor);
+		
+		var select = document.getElementById('idConductor');
+		
+		for(var i = 0; i < listaConductor.length; i++) {
+		    var opt = listaConductor[i];
+		    var el = document.createElement("option");
+		    el.value = listaConductor[i].codigo;
+		    el.textContent = listaConductor[i].nombre;
+		    select.appendChild(el);
+		}
+		
+	</script>
 	
 	<script>
 			
@@ -168,14 +186,30 @@
 	    	$('#tableVehiculo').DataTable();
 		} );
 		
+		$(document).on("click", ".btn-editar", function(){
+			var cod, mat, mar, mod, fec,con;
+
+			cod = $(this).parents("tr").find("td")[0].innerHTML;
+			mat = $(this).parents("tr").find("td")[1].innerHTML;
+			mar = $(this).parents("tr").find("td")[2].innerHTML;
+			mod = $(this).parents("tr").find("td")[3].innerHTML;
+			fec = $(this).parents("tr").find("td")[4].innerHTML;
+			con = $(this).parents("tr").find("td")[5].innerHTML;
+
+			$("#idCodigoVeh").val(cod);
+			$("#idMatriculaVeh").val(mat);
+			$("#idMarcaVeh").val(mar);
+			$("#idModeloVeh").val(mod);
+			$("#idFecProVeh").val(fec);
+			$("#idConductor").val(con);
+
+		});
 		
 		$(document).on("click","#btn-cerrar",function(){
 			
 			$('#formVehiculo').data("bootstrapValidator").resetForm(true);
 			
 			$('#formVehiculo').trigger("reset");
-			
-			//$("#idCodigo").val(null);
 		})
 		
 	</script>
@@ -184,7 +218,7 @@
 	    $(document).ready(function(){      	
 	        $('#formVehiculo').bootstrapValidator({      
 	        fields:{
-	        	matriculaVeh:{
+	        	matricula:{
 	        			validators:{
 	        				 notEmpty:{
 	       		 				 message:'Matricula es Obligatorio'
@@ -195,7 +229,7 @@
 	        				 }
 	        			 }
 	        		 },
-	        		 marcaVeh:{
+	        		 marca:{
 	        			 validators:{
 	        				 notEmpty:{
 	        					 message:'Marca es Obligatorio'
@@ -206,7 +240,7 @@
 	        				 }
 	        			 }
 	        		 },
-	        		 modeloVeh:{
+	        		 modelo:{
 	        			 validators:{
 	        				 notEmpty:{
 	        					 message:'Modelo es Obligatorio'
@@ -217,7 +251,7 @@
 	        				 }
 	        			 }
 	        		 },
-	        		 fecProVeh:{
+	        		 fechaAd:{
 	        			 validators:{
 	        				 notEmpty:{
 	        					 message:'Fecha de Adquisicion es Obligatorio'
@@ -228,7 +262,7 @@
 	        				 }
 	        			 }
 	        		 },
-	        		 conductor:{
+	        		 codConductor:{
 	        			 validators:{
 	        				 notEmpty:{
 	        					 message:'Conductor es Obligatorio'
