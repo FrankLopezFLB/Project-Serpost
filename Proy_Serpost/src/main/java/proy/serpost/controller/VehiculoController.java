@@ -38,19 +38,28 @@ public class VehiculoController {
 		model.addAttribute("vehiculo" , new Vehiculo());
 		model.addAttribute("lstConductor",repocon.findAll());
 		model.addAttribute("lstVehiculos",repov.findAll());
-		System.out.println(repocon.findAll());
 		
 		return "mantenimientoVehiculo";
 	}
 	
 	@PostMapping("/guardar")
 	public String guardarVehiculo(@ModelAttribute Vehiculo v,Model model){
-		
-		//repov.save(v);
+		if ((v.getCodigo() == null) | (v.getCodigo() == ""))
+		{
+			v.setCodigo(incrementaCodigo(repov.getMaxCodigoVehiculo()));
+		}		
+		repov.save(v);
 		model.addAttribute("mensaje", "Vehiculo agregado");
 		model.addAttribute("lstVehiculos",repov.findAll());
 		model.addAttribute("lstConductor",repocon.findAll());
 		System.out.println(v);
-		return "mantenimientoVehiculo";
+		return "redirect:/vehiculo/cargar";
+	}
+	
+	@PostMapping("/eliminar")
+	public String eliminarVehiculo(@ModelAttribute Vehiculo v, Model model ) {
+		repov.deleteById(v.getCodigo());
+		model.addAttribute("lstVehiculos",repov.findAll());
+		return "redirect:/vehiculo/cargar";
 	}
 }
