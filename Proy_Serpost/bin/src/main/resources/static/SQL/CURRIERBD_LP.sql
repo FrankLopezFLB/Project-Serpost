@@ -65,73 +65,6 @@ BEGIN
   insert into DESTINO values(CODIGO,PAIS,CIUDAD,CODIGO_POS,REG_CODIGO);
 END //
 DELIMITER ;
-drop database if exists CURRIERBD_LP;
-
-create database CURRIERBD_LP;
-use CURRIERBD_LP;
-
-/*---------------------------REGION DESTINO-----------------------------*/
-Create table REGION
-(
-	REG_CODIGO		int,
-    REG_DESCRIPCION	varchar(25),
-    REG_COSTO		decimal
-);
-
-Alter Table REGION
-Add constraint PK_REGION primary key (REG_CODIGO);
-
-insert into REGION values (1,'Sudamerica',50);
-insert into REGION values (2,'Norte de America',80);
-insert into REGION values (3,'Europa',95);
-insert into REGION values (4,'Asia',120);
-insert into REGION values (5,'Oceania',140);
-
-/*---------------------------DESTINO-----------------------------*/
-Create table DESTINO
-(
-	DES_CODIGO			char(5),
-    DES_PAIS			varchar(30),
-    DES_CIUDAD			varchar(30),
-    DES_CODIGO_POS		char(5),
-    REG_CODIGO			int
-);
-
-Alter Table DESTINO
-Add constraint PK_DESTINO primary key (DES_CODIGO),
-Add constraint FK_DESTINO foreign key (REG_CODIGO) references REGION (REG_CODIGO);
-
-insert into DESTINO values ('D0001','CHILE','SANTIAGO','15487',1);
-insert into DESTINO values ('D0002','RUSIA','MOSCÚ','75428',4);
-insert into DESTINO values ('D0003','FRANCIA','PARIS','18547',3);
-insert into DESTINO values ('D0004','ARGENTINA','BUENOS AIRES','91547',1);
-insert into DESTINO values ('D0005','BRASIL','BRASILIA','13542',1);
-insert into DESTINO values ('D0006','EEUU','LOS ANGELES','14365',2);
-insert into DESTINO values ('D0007','CHINA','PEKIN','68735',4);
-
-/* PROCEDURE LISTAR DESTINOS */
-DELIMITER //
-CREATE PROCEDURE LISTAR_DESTINOS()
-BEGIN
-  SELECT d.DES_CODIGO, d.DES_PAIS, d.DES_CIUDAD, d.DES_CODIGO_POS, d.REG_CODIGO, r.REG_DESCRIPCION
-  FROM DESTINO d inner JOIN REGION r on d.REG_CODIGO = r.REG_CODIGO;
-END //
-DELIMITER ;
-
-/* PROCEDURE GUARDAR DESTINO */
-DELIMITER //
-CREATE PROCEDURE GUARDAR_DESTINO(
-IN
-	CODIGO			char(5),
-    PAIS			varchar(30),
-    CIUDAD			varchar(30),
-    CODIGO_POS		char(5),
-    REG_CODIGO		int
-)
-BEGIN
-  insert into DESTINO values(CODIGO,PAIS,CIUDAD,CODIGO_POS,REG_CODIGO);
-END //
-DELIMITER ;
 
 /* PROCEDURE ACTUALIZAR DESTINO */
 DELIMITER //
@@ -332,12 +265,13 @@ DESC_MENU	VARCHAR(100),
 URL_MENU	VARCHAR(120)
 );	
 
-INSERT INTO MENU values(null,'Mantenimiento Trabajador','/trabajador/cargar');
-INSERT INTO MENU values(null,'Mantenimiento Vehiculo','/vehiculo/cargar');
-INSERT INTO MENU values(null,'Mantenimiento Destino','/destino/cargar');
-INSERT INTO MENU values(null,'Mantenimiento Cliente','/cliente/cargar');
-INSERT INTO MENU values(null,'Reporte tipo','/cargarReporteTipo');
-INSERT INTO MENU values(null,'Reporte fecha','/cargarReporteFecha');
+INSERT INTO MENU values(null,'Mantenimiento Trabajador','ServletTrabajador?ACCION=LISTAR');
+INSERT INTO MENU values(null,'Mantenimiento Vehiculo','ServletVehiculo?ACCION=LISTAR');
+INSERT INTO MENU values(null,'Mantenimiento Destino','ServletDestino?ACCION=LISTAR');
+INSERT INTO MENU values(null,'Mantenimiento Cliente','ServletCliente?ACCION=LISTAR');
+INSERT INTO MENU values(null,'Reporte tipo','reportetipo.jsp');
+INSERT INTO MENU values(null,'Reporte fecha','reportefecha.jsp');
+INSERT INTO MENU values(null,'Envios','ServletRequerimiento?ACCION=LISTAR');
 
 /*---------------------------ACCESO-----------------------------*/
 
@@ -354,10 +288,11 @@ INSERT INTO ACCESO VALUES(3,1);
 INSERT INTO ACCESO VALUES(4,1);
 INSERT INTO ACCESO VALUES(5,1);
 INSERT INTO ACCESO VALUES(6,1);
+INSERT INTO ACCESO VALUES(7,1);
 INSERT INTO ACCESO VALUES(4,5);
 INSERT INTO ACCESO VALUES(5,5);
 INSERT INTO ACCESO VALUES(6,5);
-
+INSERT INTO ACCESO VALUES(7,5);
 
 /*-------------------CLIENTE----------------------*/
 CREATE TABLE CLIENTE
@@ -509,11 +444,10 @@ INSERT INTO DETALLE_ENVIO VALUES ('E00003',2,'Reloj',2,3);
 
 /*-------------------------------------------------------------------*/
 
-
 DELIMITER //
 Create procedure REPORTEXFECHA(In fec1 date, fec2 date)
 BEGIN
-	select e.ENV_CODIGO, e.ENV_NOM_DEST, e.ENV_FECHA, CONCAT(c.CLI_NOMBRE," ",c.CLI_APELLIDO) as NOM_CLIENTE, de.DET_CODIGO, de.DET_NOMBRE, tio.TIP_OBJ_DESCRIPCION
+	select e.ENV_CODIGO, e.ENV_NOM_DEST, e.ENV_FECHA, CONCAT(c.CLI_NOMBRE," ",c.CLI_APELLIDO), de.DET_CODIGO, de.DET_NOMBRE, tio.TIP_OBJ_DESCRIPCION
 	from ENVIO e 
 	inner join DETALLE_ENVIO de on e.ENV_CODIGO  = de.ENV_CODIGO 
     inner join CLIENTE c on e.CLI_CODIGO = c.CLI_CODIGO
@@ -523,16 +457,14 @@ END //
 DELIMITER ;
 
 DELIMITER //
-CREATE PROCEDURE REPORTEXTIPO(In tipo int)
--- CREATE PROCEDURE REPORTEXTIPO(In tipo varchar(25))
+CREATE PROCEDURE REPORTEXTIPO(In tipo varchar(25))
 BEGIN
-	select e.ENV_CODIGO, e.ENV_NOM_DEST, e.ENV_FECHA, CONCAT(c.CLI_NOMBRE," ",c.CLI_APELLIDO) as NOM_CLIENTE, de.DET_CODIGO, de.DET_NOMBRE, tio.TIP_OBJ_DESCRIPCION
+	select e.ENV_CODIGO, e.ENV_NOM_DEST, e.ENV_FECHA, CONCAT(c.CLI_NOMBRE," ",c.CLI_APELLIDO), de.DET_CODIGO, de.DET_NOMBRE, tio.TIP_OBJ_DESCRIPCION
 	from ENVIO e 
 	inner join DETALLE_ENVIO de on e.ENV_CODIGO  = de.ENV_CODIGO 
     inner join CLIENTE c on e.CLI_CODIGO = c.CLI_CODIGO
     inner join TIPO_OBJETO tio on de.TIP_OBJ_CODIGO = tio.TIP_OBJ_CODIGO
-    where tio.TIP_OBJ_CODIGO = tipo;
-    -- where tio.TIP_OBJ_DESCRIPCION = tipo;
+    where tio.TIP_OBJ_DESCRIPCION = tipo;
 END //
 DELIMITER ;
-
+/*----------------------------------------------------------------------------------*/
