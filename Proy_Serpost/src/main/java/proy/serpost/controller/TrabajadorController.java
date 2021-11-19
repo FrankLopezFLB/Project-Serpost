@@ -87,7 +87,7 @@ public class TrabajadorController {
 			System.out.println(menuaux);
 			System.out.println(t.getCodigoTra());
 			model.addAttribute("trabajador",t);
-			return "redirect:/trabajador/cargar";
+			return "menu";
 		}
 		}
 	

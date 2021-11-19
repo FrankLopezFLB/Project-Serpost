@@ -33,20 +33,24 @@ public class VehiculoController {
 	}
 	
 	@GetMapping("/cargar")
-	public String cargarVehiculos(Model model) {
+	public String cargarVehiculos(@ModelAttribute Vehiculo vehiculo, Model model) {
 		System.out.println(incrementaCodigo(repov.getMaxCodigoVehiculo()));
-		model.addAttribute("vehiculo",new Vehiculo(null,null,null,null,null,-1));
+		model.addAttribute("vehiculo" , new Vehiculo());
+		model.addAttribute("lstConductor",repocon.findAll());
 		model.addAttribute("lstVehiculos",repov.findAll());
-		model.addAttribute("lstConductores",repocon.findAll());
+		System.out.println(repocon.findAll());
+		
 		return "mantenimientoVehiculo";
 	}
 	
 	@PostMapping("/guardar")
 	public String guardarVehiculo(@ModelAttribute Vehiculo v,Model model){
-		repov.save(v);
+		
+		//repov.save(v);
 		model.addAttribute("mensaje", "Vehiculo agregado");
 		model.addAttribute("lstVehiculos",repov.findAll());
-		model.addAttribute("lstConductores",repocon.findAll());
+		model.addAttribute("lstConductor",repocon.findAll());
+		System.out.println(v);
 		return "mantenimientoVehiculo";
 	}
 }
