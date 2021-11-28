@@ -26,10 +26,15 @@ public class ClienteController {
 
 	@PostMapping("/grabar")
 	public String grabarPag(@ModelAttribute Cliente cliente, Model model) {
+		try {
 		System.out.println("Listo para grabar");
 		System.out.println(cliente);
 		repoc.save(cliente);
+		model.addAttribute("mensaje", "Registrado correctamente");
 		model.addAttribute("lstClientes", repoc.findAll());
-		return "redirect:/cliente/cargar";
+		}catch(Exception c) {
+			model.addAttribute("mensaje", "Error al registrar");
+		}
+		return cargarCli(model);
 	}
 }

@@ -42,9 +42,11 @@ public class DestinoController {
 		System.out.println(d);
 		if(validaDestino(d)) {
 			d.setCodigo(generaCodigo(d.getCodigo()));
+			model.addAttribute("mensaje", "Registrado correctamente");
 			repod.save(d);
 		}
 		else {
+			model.addAttribute("mensaje", "Error al registrar");
 			return cargarPag(model);
 		}	
 		return cargarPag(model);

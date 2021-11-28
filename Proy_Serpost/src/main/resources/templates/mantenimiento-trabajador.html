@@ -37,23 +37,23 @@
 		  box-shadow: 0 0 0 0.2rem rgba(250, 16, 0, 0.18);
 		}
 		.hidetext { -webkit-text-security: disc;}
+		
 	
 	</style>
 </head>
 <body>
 <div th:replace="menu::header">
 </div>
-<div class="container">
-	<!--	<c:if test="${requestScope.MENSAJE!=null}">
-	  		<div class="alert alert-primary alert-dismissible fade show" role="alert">
-			  <strong>${requestScope.MENSAJE}</strong>
-			  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			    <span aria-hidden="true">&times;</span>
-			  </button>
-			</div>
-  		</c:if>-->
-  		<br>
-  		<br>
+
+<div class="alert alert-warning alert-dismissible fade show" th:if="${mensaje}">
+		  			<div th:text="${mensaje}"></div >
+		  			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    			<span aria-hidden="true">&times;</span>
+		  			</button>
+				</div>
+<div class="container" >
+	
+		<br>
   		<h2 class="text-center tits">Lista de Trabajadores</h2>
   		<br>
   		<!-- Button trigger modal -->
@@ -154,6 +154,8 @@
 			        <button type="submit" class="btn btn-primary" style = "background-color:#191796">Guardar</button>
 			        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="btn-cerrar">Cerrar</button>			        
 			      </div>
+			      	 
+			</div>
 				</form>
 		      </div>
 		      
@@ -211,7 +213,8 @@
 	            minViewMode: 3,
 	            language: "es",
 	            //todayHighlight: true,
-	            autoclose: true,
+	            autoclose: true
+	           
 	        })
 	    })
 	</script>
@@ -240,7 +243,7 @@
 	    $('#tableTrabajador').DataTable();
 	    //llenarCargo();
 	} );
-	
+	//dale marmota!
 	//asignar evento click a los botones con clase "btn-editar"
 		$(document).on("click",".btn-editar",function(){
 		//variables
@@ -338,12 +341,13 @@
         		 	},
         		 	fechaTaa:{
         		 		validators:{
-        		 			notEmpty:{
+        		 		notEmpty:{
         		 				message:'Campo Fecha de nacimiento es obligatorio(yyyy-mm-dd)'
         		 			},
        		 			 regexp:{
 	        					 regexp:/^\d{4}-\d{2}-\d{2}$/,
-	        					 message:'Formato: yyyy-mm-dd'
+	        					 message:'Formato: yyyy-mm-dd' 
+	        					
 	        				 }
         		 		}
         		 	},

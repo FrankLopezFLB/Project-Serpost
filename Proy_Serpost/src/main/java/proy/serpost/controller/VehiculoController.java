@@ -44,6 +44,7 @@ public class VehiculoController {
 	
 	@PostMapping("/guardar")
 	public String guardarVehiculo(@ModelAttribute Vehiculo v,Model model){
+		try {
 		if ((v.getCodigo() == null) | (v.getCodigo() == ""))
 		{
 			v.setCodigo(incrementaCodigo(repov.getMaxCodigoVehiculo()));
@@ -53,7 +54,10 @@ public class VehiculoController {
 		model.addAttribute("lstVehiculos",repov.findAll());
 		model.addAttribute("lstConductor",repocon.findAll());
 		System.out.println(v);
-		return "redirect:/vehiculo/cargar";
+		}catch(Exception X) {
+			model.addAttribute("mensaje", "Error al registrar");
+		}
+		return cargarVehiculos(new Vehiculo(),model);
 	}
 	
 	@PostMapping("/eliminar")
