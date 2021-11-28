@@ -39,6 +39,7 @@ public class ReporteController {
 
 	@PostMapping("/filtrarReporteTipo")
 	public String filtrarReporteTipo(@ModelAttribute TipoObjeto tipoobjeto, Model model) {
+		try {
 		model.addAttribute("tipoobjeto", tipoobjeto);
 		
 		List<Reporte> listaReporte = repor.spReportexTipo(tipoobjeto.getCodigo());
@@ -49,6 +50,11 @@ public class ReporteController {
 		
 		model.addAttribute("lstTipoObjetos", repoto.findAll());
 		return "reportetipo";
+		}
+		catch(Exception e) {
+			System.out.println("Combo inválido");
+			return "reportetipo";
+		}
 	}
 	
 	/*  F E C H A  */
@@ -62,13 +68,19 @@ public class ReporteController {
 	
 	@PostMapping("/filtrarReporteFecha")
 	public String filtrarReporteFecha(@ModelAttribute AuxiliarFecha auxfecha, Model model) {
+		try {
 		model.addAttribute("auxfecha", auxfecha);
 		
 		List<Reporte> listaReporte = repor.spReportexFecha(auxfecha.getFec1(), auxfecha.getFec2());
 		model.addAttribute("lstReporteFecha", listaReporte);
 		
 		System.out.println(listaReporte);
-		return "reportefecha";
+			return "reportefecha";
+		}
+		catch(Exception e) {
+			System.out.println("Fechas vacías");
+			return "reportefecha";
+		}
 	}
 }
 
