@@ -33,20 +33,37 @@ public class VehiculoController {
 	}
 	
 	@GetMapping("/cargar")
-	public String cargarVehiculos(Model model) {
+	public String cargarVehiculos(@ModelAttribute Vehiculo vehiculo, Model model) {
 		System.out.println(incrementaCodigo(repov.getMaxCodigoVehiculo()));
-		model.addAttribute("vehiculo",new Vehiculo(null,null,null,null,null,-1));
+		model.addAttribute("vehiculo" , new Vehiculo());
+		model.addAttribute("lstConductor",repocon.findAll());
 		model.addAttribute("lstVehiculos",repov.findAll());
-		model.addAttribute("lstConductores",repocon.findAll());
+		
 		return "mantenimientoVehiculo";
 	}
 	
 	@PostMapping("/guardar")
 	public String guardarVehiculo(@ModelAttribute Vehiculo v,Model model){
+		try {
+		if ((v.getCodigo() == null) | (v.getCodigo() == ""))
+		{
+			v.setCodigo(incrementaCodigo(repov.getMaxCodigoVehiculo()));
+		}		
 		repov.save(v);
 		model.addAttribute("mensaje", "Vehiculo agregado");
 		model.addAttribute("lstVehiculos",repov.findAll());
-		model.addAttribute("lstConductores",repocon.findAll());
-		return "mantenimientoVehiculo";
+		model.addAttribute("lstConductor",repocon.findAll());
+		System.out.println(v);
+		}catch(Exception X) {
+			model.addAttribute("mensaje", "Error al registrar");
+		}
+		return cargarVehiculos(new Vehiculo(),model);
+	}
+	
+	@PostMapping("/eliminar")
+	public String eliminarVehiculo(@ModelAttribute Vehiculo v, Model model ) {
+		repov.deleteById(v.getCodigo());
+		model.addAttribute("lstVehiculos",repov.findAll());
+		return "redirect:/vehiculo/cargar";
 	}
 }

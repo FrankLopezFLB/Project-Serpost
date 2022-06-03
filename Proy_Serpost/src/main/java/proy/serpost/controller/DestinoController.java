@@ -22,22 +22,11 @@ public class DestinoController {
 	@Autowired
 	private IRepositoryRegion repor;
 	
-	String incrementaCodigo(String Codigo) {
-		
-		Codigo = Codigo.substring(1, Codigo.length());
-		int num = Integer.parseInt(Codigo)+1;
-		int largo = (num+"").length();
-		int repetir = 0;
-		if(largo < 4)
-			repetir = 4-largo;
-		Codigo = "D" + "0".repeat(repetir) + num;
-		//System.out.println("Numero: " + num + " | Largo: " + largo + " | Repetir: " + repetir+ " | Codigo: " + Codigo);
-		return Codigo;
-	}
-	
 	@GetMapping("/cargar")
 	public String cargarPag(Model model) {
-		model.addAttribute("destino", new Destino(null, null, null, null, -1));
+		Destino des = new Destino();
+		des.setCodregion(-1);
+		model.addAttribute("destino", des);
 		model.addAttribute("lstRegiones", repor.findAll());
 		model.addAttribute("lstDestinos", repod.findAll());
 		
@@ -50,49 +39,64 @@ public class DestinoController {
 	
 	@PostMapping("/guardar")
 	public String actualizarReg(@ModelAttribute Destino d, Model model) {
-		repod.save(d);
-		
-		model.addAttribute("mensaje", "Registro eliminado");
-		
-		model.addAttribute("destino", new Destino());
-		model.addAttribute("lstRegiones", repor.findAll());
-		model.addAttribute("lstDestinos", repod.findAll());
-		return "mantenimientoDestino";
-		
-		/*try {
-			Destino destino_actualizar = repod.findByCodigo(d.getCodigo());
-			repod.save(destino_actualizar);
-			
-			model.addAttribute("mensaje", "Registro eliminado");
-			
-			model.addAttribute("destino", new Destino());
-			model.addAttribute("lstRegiones", repor.findAll());
-			model.addAttribute("lstDestinos", repod.findAll());
-			return "mantenimientoDestino";
-			
-		} catch (Exception e) {
-			model.addAttribute("mensaje", "Error al eliminar");
-			
-			model.addAttribute("destino", new Destino());
-			model.addAttribute("lstRegiones", repor.findAll());
-			model.addAttribute("lstDestinos", repod.findAll());
-			return "mantenimientoDestino";
-		}*/
+		System.out.println(d);
+		if(validaDestino(d)) {
+			d.setCodigo(generaCodigo(d.getCodigo()));
+			model.addAttribute("mensaje", "Registrado correctamente");
+			repod.save(d);
+		}
+		else {
+			model.addAttribute("mensaje", "Error al registrar");
+			return cargarPag(model);
+		}	
+		return cargarPag(model);
 	}
 	
-	/*@PostMapping("/eliminar")
+	@PostMapping("/eliminar")
 	public String eliminarReg(@ModelAttribute Destino d, Model model) {
-		repod.deleteById(d.getCodigo());
-		boolean aux = repod.findByCodigolibro(d.getCodigo()) == null;
-		if(aux == true) {
-			model.addAttribute("mensaje", "Registro eliminado");
-		} else {
-			model.addAttribute("mensaje", "Error al eliminar");
-		}
-		model.addAttribute("destino", new Destino());
-		model.addAttribute("lstRegiones", repor.findAll());
-		model.addAttribute("lstDestinos", repod.findAll());
 		
-		return "mantenimientoDestino";
-	}*/
+		repod.deleteById(d.getCodigo());
+		return cargarPag(model);
+	}
+	
+	/*  M E T O D O S  */
+	public boolean validaDestino(Destino des) {
+		String ciudad = des.getCiudad();
+		String cod_postal = des.getCodpostal();
+		int cod_region = des.getCodregion();
+		String pais = des.getPais();
+		
+		if(ciudad == null || cod_postal == null || cod_region == -1 || pais == null) {
+			System.out.println("valida false");
+			return false;
+		}
+		else {
+			System.out.println("valida true");
+			return true;
+		}
+	}
+	
+	public String generaCodigo(String Codigo) {
+		if(Codigo != "") {
+			System.out.println("Codigo dif null: " + Codigo);
+			return Codigo;
+		}
+		else {
+			Codigo = repod.getMaxCodigoDestino();
+			System.out.println("max codigo: " + Codigo);
+			if(Codigo == null)
+				return "D0001";
+			else{
+				Codigo = Codigo.substring(1, Codigo.length());
+				int num = Integer.parseInt(Codigo)+1;
+				int largo = (num+"").length();
+				int repetir = 0;
+				if(largo < 4)
+					repetir = 4-largo;
+				Codigo = "D" + "0".repeat(repetir) + num;
+				System.out.println("Else: " + Codigo);
+				return Codigo;
+			}
+		}
+	}
 }

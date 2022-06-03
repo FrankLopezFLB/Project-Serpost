@@ -26,6 +26,8 @@
 </head>
 
 <body>
+<div th:replace="menu::header">
+</div>
 	<div class="container">
 		<br>
 		<br>
@@ -33,19 +35,25 @@
 		<br>
 		<br>
 		<br>
+		<br>
+		<br>
+		<br>
+		<form action="/filtrarReporteFecha" th:object="${auxfecha}" method="POST">
 		<div class="row">
 			<div class="col-md-2"> 
-			    <input class="form-control" id="idFecha1" name="fechaI" placeholder="fecha Inicial" type="text"/>	
+			    <input class="form-control" id="idFecha1" name="fechaI" placeholder="fecha Inicial" type="text" th:field="*{fec1}"/>	
 			            
 	      	</div>
 	      	<div class="col-md-2">		   
-			    <input class="form-control" id="idFecha2" name="fechaF" placeholder="Fecha Final" type="text"/>	
+			    <input class="form-control" id="idFecha2" name="fechaF" placeholder="Fecha Final" type="text" th:field="*{fec2}"/>	
 			            
 	      	</div>
-			<div class="col-md-2"> 
-			    <button type="button" id="idBuscar"class="btn btn-primary" style = "background-color:#191796">Buscar</button>
+			<div class="col-md-2">
+			    <button type="submit" id="idBuscar" class="btn btn-primary" style = "background-color:#191796">Buscar</button>
 			</div>
 		</div>
+		</form>
+		
 		<br>
 		<br>
 		<table id="tableReporte" class="table table-striped table-bordered" style="width:100%">
@@ -61,6 +69,17 @@
 	            </tr>
 	        </thead>
 	        <tbody>
+	        	<tr th:each="rf : ${lstReporteFecha}" var="row">
+						<td th:text="${rf.codigo}"></td>
+						<td th:text="${rf.destinatario}"></td>
+						<td th:text="${rf.fechaenvio}"></td>
+						<td th:text="${rf.cliente}"></td>
+						
+						<td th:if="${rf.detallecodigo!=0}" th:text="${rf.detallecodigo}"></td>
+						<td th:text="${rf.detallenombre}"></td>
+						
+						<td th:text="${rf.tipoobjeto}"></td>
+					</tr>
 	 		</tbody>
 	    </table>
 	</div>
@@ -79,7 +98,7 @@
 	
 	<script>
 		$(document).ready(function() {
-    		$('#tablereporte').DataTable();
+    		$('#tableReporte').DataTable();
 		});
 		
 		$(document).ready(function(){
@@ -92,13 +111,13 @@
 			})
 		})
 		
-		$(document).on("click","#idBuscar",function(){
+		/*$(document).on("click","#idBuscar",function(){
 			var fe1,fe2;
 			fe1=$("#idFecha1").val();
 			fe2=$("#idFecha2").val();		
 			$("#tableReporte tbody").empty();
 			
-			/*$.getJSON("ServletReportexfec",{fechaI:fe1,fechaF:fe2},function(response){$.each(response,function(index,item){
+			$.getJSON("ServletReportexfec",{fechaI:fe1,fechaF:fe2},function(response){$.each(response,function(index,item){
 				$("#tableReporte").append(  "<tr><td>"+item.codigo+
 											"</td><td>"+item.nomDes+
 											"</td><td>"+item.fecEnv+
@@ -107,8 +126,8 @@
 											"</td><td>"+item.nomObj+
 											"</td><td>"+item.nomTipObj+"</td></tr>");
 				})
-			})*/
-		})
+			})
+		})*/
 	</script>
 </body>
 

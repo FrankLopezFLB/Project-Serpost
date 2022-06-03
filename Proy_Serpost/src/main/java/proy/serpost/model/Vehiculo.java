@@ -26,7 +26,7 @@ public class Vehiculo {
 	
 	@Column(name="CON_CODIGO")
 	private int codConductor;
-
+	
 	public String getCodigo() {
 		return codigo;
 	}

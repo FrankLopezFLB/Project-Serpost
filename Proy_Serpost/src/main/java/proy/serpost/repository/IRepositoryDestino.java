@@ -10,4 +10,5 @@ public interface IRepositoryDestino extends JpaRepository<Destino, String> {
 	
 	@Query(value = "SELECT max(codigo) FROM Destino")
 	String getMaxCodigoDestino();
+	
 }

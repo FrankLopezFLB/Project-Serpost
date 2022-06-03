@@ -41,25 +41,29 @@ public class TrabajadorController {
 		return "login";
 	}
 	@GetMapping("/cargar")
-	public String cargarPag(HttpSession session,@ModelAttribute Trabajador trabajador, Model model) {		
+	public String cargarPag(@ModelAttribute Trabajador trabajador, Model model) {		
 
 		model.addAttribute("trabajador", new Trabajador());	
 		model.addAttribute("lstCargo",repoCargo.findAll());
 		model.addAttribute("lstTrabajador",repo.findAll());
+		//model.addAttribute("mensaje", "asdasdsa");
 		System.out.println("Listado abierto");
 		return "mantenimiento-trabajador";
 	}
 	
 	@PostMapping("/guardar")
 	public String guardarTrabajador(@ModelAttribute Trabajador t,Model model){
+		try {
 		model.addAttribute("trabajador", new Trabajador());
 		model.addAttribute("lstTrabajador",repo.findAll());
 		model.addAttribute("lstCargo",repoCargo.findAll());
-		model.addAttribute("mensaje", "Trabajador agregado");
-		
+		model.addAttribute("mensaje", "Trabajador registrado correctamente");
 		repo.save(t);
-			
-		return "redirect:/trabajador/cargar";
+		} catch(Exception e) {
+			model.addAttribute("mensaje", "Error al registrar trabajador");
+		}
+		return cargarPag(new Trabajador(), model);
+		//return "redirect:/trabajador/cargar";
 	}
 	
 	@PostMapping("/eliminar")
@@ -87,7 +91,7 @@ public class TrabajadorController {
 			System.out.println(menuaux);
 			System.out.println(t.getCodigoTra());
 			model.addAttribute("trabajador",t);
-			return "redirect:/trabajador/cargar";
+			return "menu";
 		}
 		}
 	
